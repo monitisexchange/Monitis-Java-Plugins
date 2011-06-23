@@ -2,9 +2,9 @@ package org.monitis.GenericCustomMonitor;
 
 import java.util.List;
 
-import org.sourcio.monitis.beans.MonResult;
-import org.sourcio.monitis.beans.MonResultParameter;
-import org.sourcio.monitis.beans.MonitorParameter;
+import org.monitis.beans.MonResult;
+import org.monitis.beans.MonResultParameter;
+import org.monitis.beans.MonitorParameter;
 /**
  * Abstract class that provide definitions for Generic Custom Monitor.
  * User should extend it for implementing of own custom monitor

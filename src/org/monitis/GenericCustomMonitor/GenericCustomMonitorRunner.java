@@ -2,11 +2,11 @@ package org.monitis.GenericCustomMonitor;
 
 import org.json.JSONObject;
 import org.json.XML;
-import org.sourcio.monitis.api.monitor.Agent;
-import org.sourcio.monitis.api.monitor.CustomMonitor;
-import org.sourcio.monitis.beans.Response;
-import org.sourcio.monitis.enums.OutputType;
-import org.sourcio.monitis.utils.TimeUtility;
+import org.monitis.api.monitor.Agent;
+import org.monitis.api.monitor.CustomMonitor;
+import org.monitis.beans.Response;
+import org.monitis.enums.OutputType;
+import org.monitis.utils.TimeUtility;
 
 /**
  * This class is responsible for adding of a new custom monitor to the existing
