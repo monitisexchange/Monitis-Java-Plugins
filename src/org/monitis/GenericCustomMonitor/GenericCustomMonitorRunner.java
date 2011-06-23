@@ -108,10 +108,9 @@ public class GenericCustomMonitorRunner  extends Thread {
 		try {
 			// registering and get token
 			agent = new Agent(apiKey, secretKey);
-//			resp = agent.getToken();
-//			System.out.println("getToken()\n"+resp.getResponseText());
-//			token = new JSONObject(resp.getResponseText()).getString("authToken");
-			token = "45NEHMS558U81MTG63SSCD1I3K";
+			resp = agent.getToken();
+			System.out.println("getToken()\n"+resp.getResponseText());
+			token = new JSONObject(resp.getResponseText()).getString("authToken");
 			System.out.println("New authToken = "+token);
 			if (token == null || token.length() <= 0) {
 				System.err.println("Couldn't obtain authToken");
