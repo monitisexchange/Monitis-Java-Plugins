@@ -1,0 +1,115 @@
+### Monitis Logs Monitor
+
+This project presents the custom monitor that provide remotely monitoring Java logs based on Monitis Open API 
+and by using approach described in <https://github.com/shunanya/Monitis-Java-Plugins>. 
+
+The Java logs monitor works as separate Application to avoiding of  inadmissible affects and side effects onto the monitored application.
+Besides, the Java Logs Monitor is fully implemented  on Java to get platform independence like monitored application.
+Requirements for monitored application is the following
+
+  - Aplication should use Log4J logging library
+  - log_mon.jar have to be included in addition into the list of Aplication libraries
+  - Log4J configuration should have XML format
+  - The specially tuned SocketAppender has to be added in addition into Log4J configuration like depicted below
+
+<code>
+  :	\<appender name="monitisAppender" class="org.apache.log4j.net.SocketAppender"\>  
+    :		\<param name="Port" value="4560" /\>  
+		\<param name="RemoteHost" value="localhost" /\>  
+		\<param name="ReconnectionDelay" value="10000" /\>  
+		\<param name="Threshold" value="ALL" /\>  
+		\<filter class="org.monitis.logmonitor.logger.MonitisFilter"\>  
+   		\<param name="filterPattern" value="(Error|Fatal|Warn*|Attention)" /\>	Pattern-string for selection of log records that you want to monitor  
+   		\<param name="minAllowedLevel" value="WARN" /\>  
+		\</filter\>  
+  :	\</appender\>  
+</code>
+
+where
+
+ - "Port" is the port number that listen Log Monitor
+ - "RemoteHost" is the host machine IP where the Log Monitor is located
+ - "ReconnectionDelay" is the time interval to periodically try to establish connection to the Log Monitor
+ - "Threshold" is the log records level that will be given to monitisAppender for analysis
+ - "filterPattern" is a pattern-string for selection of log records that you want to monitor
+    (default is no any pattern - so all records will be sent to Log Monitor)
+ - "minAllowedLevel" is the log records level (ERROR, WARN, DEBUG, etc.) that you want to monitor
+    (default value is WARN)
+
+Note that usage of SocketAppender gave us, in addition, a possibility to be wholly free of what other appenders 
+uses monitored application because log records will be received directly from Logging system 
+but not through a log file or some other secondary  sources.
+So, the cooperation of monitored application and log monitor can be depicted as the following rough diagram
+
+<code>
+
+      -------------         -------------
+     |             |       |             |
+     | Monitored   | ----> | log-monitor | ---> Monitis
+     | Application |  TCP  |             | HTTPs
+      -------------         -------------  
+                   filtered
+                  log records
+
+</code>
+
+The project contain the following code 
+(the separated lib folder wasn't commited to avoid duplication)
+
+ * log_mon	-		Log Monitor project folder
+
+<code>
+
+    distr
+		
+      log_mon.jar		Compiled Log Monitor JAR file
+      log4j.xml			Configuration for Logging engine
+      *.jar			libraries for Log Monitor
+
+</code>
+
+ * properties	
+		
+<code>
+
+      logmonitor.properties -	Properties file for Log Monitor
+
+</code>
+
+  * src	-			Folder that contain the source codes for Log Monitor
+
+  * log_simulator	-		The monitored application simulator (sample - used for testing purpose only)
+
+<code>
+
+    distr
+
+      logsim.jar		Compiled sample application
+      log4j.xml			Typical sample configuration for monitored application
+      *.jar			libraries for sample application
+    src				Folder that contain the source codes for sample application
+
+</code>
+
+Please notice that we are using in this project the cropped Open API Java library (custom monitor strongly needed functionality have been kept only) 
+
+The Monitored application and Log Monitor can be started in arbitrary sequence because any 
+of mentioned applications will do just his own work until there isn't yet connection one 
+to other and periodically try to establish the connection.
+Please note that before checking of workability of the monitor, replace  the existing values 
+in the 'logmonitor.properties' by your own desired values.
+
+Thus, in Linux machine you can run e.g. like the following (or in reverse order)
+
+<code>
+
+    cd /home/log_simulator/bin
+    java - jar logsim.jar &
+
+    cd /home/log_mon/distr
+    java -jar log_mon.jar &
+
+</code>
+
+We suppose here that projects are located in the 'home' folder.
+

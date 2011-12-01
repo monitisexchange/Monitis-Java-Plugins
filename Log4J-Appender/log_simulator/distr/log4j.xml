@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
+
+   <appender name="consoleAppender" class="org.apache.log4j.ConsoleAppender">
+      <param name="Threshold" value="INFO" />   
+      <layout class="org.apache.log4j.SimpleLayout">
+      </layout>
+   </appender>
+
+	<appender name="monitisAppender" class="org.monitis.logmonitor.logger.MonitisAppender">
+		<param name="monitisApiKey" value="2PE0HVI4DHP34JACKCAE37IOD4" />
+		<param name="monitisSecretKey" value="7OI90FU3C3DA8ENLNJ0JGGOGO0" />
+		<param name="monitisMonitorName" value="Log_files_monitor" />
+		<param name="monitisMonitorTag" value="Custom_logger_monitor" />
+		<param name="monitisSendInterval" value="60000" />
+		
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{ISO8601} %-5p [%t]: %m%n" />
+		</layout>
+		<filter class="org.monitis.logmonitor.logger.MonitisFilter">
+			<param name="filterPattern" value="(Error|Fatal|Warn*|Attention)" />
+		</filter>
+	</appender>
+
+	<root>
+		<priority value="DEBUG" />
+		<appender-ref ref="consoleAppender" />
+		<appender-ref ref="monitisAppender" />
+	</root>
+
+</log4j:configuration>
