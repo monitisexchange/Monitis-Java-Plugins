@@ -12,18 +12,17 @@ Requirements for monitored application is the following
   - Log4J configuration should have XML format
   - The specially tuned SocketAppender has to be added in addition into Log4J configuration like depicted below
 
-<code>
-  :	\<appender name="monitisAppender" class="org.apache.log4j.net.SocketAppender"\>  
-    :		\<param name="Port" value="4560" /\>  
-		\<param name="RemoteHost" value="localhost" /\>  
-		\<param name="ReconnectionDelay" value="10000" /\>  
-		\<param name="Threshold" value="ALL" /\>  
-		\<filter class="org.monitis.logmonitor.logger.MonitisFilter"\>  
-   		\<param name="filterPattern" value="(Error|Fatal|Warn*|Attention)" /\>	Pattern-string for selection of log records that you want to monitor  
-   		\<param name="minAllowedLevel" value="WARN" /\>  
-		\</filter\>  
-  :	\</appender\>  
-</code>
+
+        <appender name="monitisAppender" class="org.apache.log4j.net.SocketAppender">  
+           <param name="Port" value="4560" />  
+           <param name="RemoteHost" value="localhost" />  
+           <param name="ReconnectionDelay" value="10000" />  
+           <param name="Threshold" value="ALL" />  
+           <filter class="org.monitis.logmonitor.logger.MonitisFilter">  
+              <param name="filterPattern" value="(Error|Fatal|Warn*|Attention)" \>	Pattern-string for selection of log records that you want to monitor  
+              <param name="minAllowedLevel" value="WARN" />  
+           </filter>  
+        </appender>  
 
 where
 
@@ -56,40 +55,20 @@ So, the cooperation of monitored application and log monitor can be depicted as 
 The project contain the following code 
 (the separated lib folder wasn't commited to avoid duplication)
 
- * log_mon	-		Log Monitor project folder
-
-<code>
-
-    distr
-		
-      log_mon.jar		Compiled Log Monitor JAR file
-      log4j.xml			Configuration for Logging engine
-      *.jar			libraries for Log Monitor
-
-</code>
-
- * properties	
-		
-<code>
-
-      logmonitor.properties -	Properties file for Log Monitor
-
-</code>
-
-  * src	-			Folder that contain the source codes for Log Monitor
-
-  * log_simulator	-		The monitored application simulator (sample - used for testing purpose only)
-
-<code>
-
-    distr
-
-      logsim.jar		Compiled sample application
-      log4j.xml			Typical sample configuration for monitored application
-      *.jar			libraries for sample application
-    src				Folder that contain the source codes for sample application
-
-</code>
+        log_mon				Log Monitor project folder
+          distr	
+            log_mon.jar		Compiled Log Monitor JAR file
+            log4j.xml		Configuration for Logging engine
+            *.jar			libraries for Log Monitor
+        properties	
+           logmonitor.properties Properties file for Log Monitor
+        src					Folder that contain the source codes for Log Monitor
+        log_simulator		The monitored application simulator (sample - used for testing purpose only)
+          distr
+            logsim.jar		Compiled sample application
+            log4j.xml		Typical sample configuration for monitored application
+            *.jar			libraries for sample application
+          src				Folder that contain the source codes for sample application
 
 Please notice that we are using in this project the cropped Open API Java library (custom monitor strongly needed functionality have been kept only) 
 
@@ -101,15 +80,11 @@ in the 'logmonitor.properties' by your own desired values.
 
 Thus, in Linux machine you can run e.g. like the following (or in reverse order)
 
-<code>
+        cd /home/log_simulator/bin
+        java - jar logsim.jar &
 
-    cd /home/log_simulator/bin
-    java - jar logsim.jar &
+        cd /home/log_mon/distr
+        java -jar log_mon.jar &
 
-    cd /home/log_mon/distr
-    java -jar log_mon.jar &
-
-</code>
-
-We suppose here that projects are located in the 'home' folder.
+_Notis that we suppose here that projects are located in the 'home' folder._
 
