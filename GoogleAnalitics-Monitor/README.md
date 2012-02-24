@@ -33,5 +33,7 @@ and replace them by your desired values.
 
 That is all.  
 
-Please note that we are presenting the sample approach only and naturally you can freely modify the code to reach your desired result.
+Please note that we are presenting the sample approach only and naturally you can freely modify the code to reach your desired result.  
+For more explanations you can look through article [Google Analytics With Monitis Dashboard](http://blog.monitis.com/index.php/2012/02/23/google-analytics-with-monitis-dashboard/)
+
 
