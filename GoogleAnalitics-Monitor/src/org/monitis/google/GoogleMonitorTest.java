@@ -9,13 +9,8 @@ import org.monitis.exception.MonitisException;
 public class GoogleMonitorTest {
 	
 	public static void main(String[] args) throws Exception {
-		Properties defaultProps = new Properties();
-		
-		FileInputStream in = new FileInputStream("conf.properties");
-			defaultProps.load(in);
-		in.close();
-		String apikey = defaultProps.getProperty("apikey");
-		String secretkey = defaultProps.getProperty("secretkey");
+		String apikey = "T5BAQQ46JPTGR6EBLFE28OSSQ";			// ApiKey that can be obtained from your Monitis account 
+		String secretkey = "248VUB2FA3DST8J31A9U6D9OHT";		// SecretKey that can be obtained from your Monitis account 
 		String username = "monitis.kpi@gmail.com"; 				// google account user name
 		String password = "p@55w0rd4monkpi"; 					// google account password
 		String accountname = "mon.itor.us"; 					// google account name
