@@ -1,7 +1,6 @@
 ## Improved Monitis Java API
 
-Some additions to the existing Monitis Java API are made that allow 
-to simply build almost any type of custom monitor.
+Some additions to the existing Monitis Java API are made that allow to simply build almost any type of custom monitor.
 
 The source code of additions are added and described. 
 The corresponding examples has been added as well.
