@@ -1,0 +1,33 @@
+{
+  "api":{
+      "server": "http://monitis.com",
+      "version": "2"
+  },
+  "user_account":{
+      "apiKey": "T5BAQQ46JPTGR6EBLFE28OSSQ",
+      "secretKey": "248VUB2FA3DST8J31A9U6D9OHT"
+  },  
+  "monitor":{
+  		"memcached_server": "127.0.0.1:11211",
+		"name": "Memcached_10.137.25.186-127.0.0.1:11211",
+		"tag": "memcached",
+		"type": "Java",
+		"testDuration": "0",
+		"processingTime": "1",
+		"params_separator": ":",
+		"result_params":[
+			"status:status::3",
+			"conn:conns:prc:4",
+			"get_miss:get_miss:prc:4",
+			"delete_miss:delete_miss:prc:4",
+			"incr_miss:incr_miss:prc:4",
+			"decr_miss:decr_miss:prc:4",
+			"mem_usage:mem_usage:prc:4",
+			"evictions:evictions:prc:4",
+			"in_kbps:in_kbps::4",
+			"out_kbps:out_kbps::4",
+			"reqs:reqs:per/s:2",
+			"uptime:uptime::3"
+		]
+  }
+}

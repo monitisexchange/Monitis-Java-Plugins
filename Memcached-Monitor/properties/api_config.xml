@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<entry key="api.server">http://monitis.com</entry>
+<entry key="api.version">2</entry>
+<entry key="user_account.apiKey">T5BAQQ46JPTGR6EBLFE28OSSQ</entry>
+<entry key="user_account.secretKey">248VUB2FA3DST8J31A9U6D9OHT</entry>
+<entry key="monitor.name">Memcached_10.137.25.186-127.0.0.1:11211</entry>
+<entry key="monitor.tag">memcached</entry>
+<entry key="monitor.type">Java</entry>
+<entry key="monitor.memcached_server">127.0.0.1:11211</entry>
+<entry key="monitor.params_separator">:</entry>
+<entry key="monitor.result_params">["server:server::3","conn:conns:prc:4","get_miss:get_miss:prc:4","delete_miss:delete_miss:prc:4","incr_miss:incr_miss:prc:4","decr_miss:decr_miss:prc:4","mem_usage:mem_usage:prc:4","evictions:evictions:prc:4","reqs:reqs:per/s:2"]</entry>
+<entry key="monitor.processingTime">60</entry>
+<entry key="monitor.testDuration">0</entry>
+</properties>
