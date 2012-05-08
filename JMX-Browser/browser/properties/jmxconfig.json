@@ -1,0 +1,18 @@
+{
+  "object":{
+  	  "command": "JMXServer.jar",
+      "access":{
+		  "host": "127.0.0.1",
+		  "port": 7199,
+		  "username": null,
+		  "password": null
+      }
+  },
+  "test": {
+      "debug": false
+  },
+  "output": {
+      "path": "tmp/jmx.csv",
+      "separator": "|"
+  }
+}
