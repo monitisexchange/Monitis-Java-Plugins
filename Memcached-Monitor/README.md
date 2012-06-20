@@ -46,12 +46,12 @@ The _monitor.config_ file is used to configure Monitor. It should be prepared in
 
 	{
 	  "api":{
-	      "server": "http://monitis.com",                   <- Monitis server URL that support Monitis Open API <i>(optional; the default value - http://monitis.com)</i>
-	      "version": "2"                                    <- Open API version <i>(optional; the default value - 2)</i>
+	      "server": "http://monitis.com",                <- Monitis server URL that support Monitis Open API <i>(optional; the default value - http://monitis.com)</i>
+	      "version": "2"                                 <- Open API version <i>(optional; the default value - 2)</i>
 	  },
 	  "user_account":{
-	      "apiKey": "T5BAQQ46JPTGR6EBLFE28OSSQ",            <- The personal API key that can be obtained from Monitis user account <b>(mandatory)</b>
-	      "secretKey": "248VUB2FA3DST8J31A9U6D9OHT"         <- The personal secret key that can be obtained from Monitis user account <b>(mandatory)</b>
+	      "apiKey": "T5BAQQ46JPTGR6EBLFE28OSSQ",         <- The personal API key that can be obtained from Monitis user account <b>(mandatory)</b>
+	      "secretKey": "248VUB2FA3DST8J31A9U6D9OHT"      <- The personal secret key that can be obtained from Monitis user account <b>(mandatory)</b>
 	  },  
 	  "monitor":{
 	  		"memcached_server": "127.0.0.1:11211",       <- Memcached server access URL <i>(optional; the default value - "localhost:11211")</i>
