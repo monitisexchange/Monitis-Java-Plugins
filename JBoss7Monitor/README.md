@@ -1,7 +1,7 @@
 #### The JBoss 7 Monitor
 
-This project implements a Monitis Custom monitor that is intended to monitor your JBoss 7 application server
-It is fully implemented on Java and uses [Monitis Java SDK](https://github.com/monitisexchange/Monitis-Java-SDK) that provides the latest version (3.0) of Monitis Open API 
+This project implements a Monitis Custom monitor to monitor your JBoss 7 application server
+It is fully implemented in Java and uses [Monitis Java SDK](https://github.com/monitisexchange/Monitis-Java-SDK) that provides the latest version (3.0) of Monitis Open API. It also uses the JBoss JSON/HTTP management interface
 
 The project folder contains the following
 
@@ -49,4 +49,6 @@ Configuration File Settings
         username  - your JBoss 7 admin username
         password  - your JBoss 7 server admin password
         name      - name for the new monitor 
+        host      - the hostname for your JBoss7 server (defaults to localhost)
+        port      - the port number for the JBoss7 JSON/HTTP management interface (defaults to 9990)
 
