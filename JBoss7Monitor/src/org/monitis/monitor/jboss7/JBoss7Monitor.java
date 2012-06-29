@@ -16,9 +16,10 @@ import org.monitis.beans.MonitorParameter;
 import org.monitis.enums.DataType;
 import org.monitis.utils.MConfig;
 
-/**
+/** This class implements a custom monitor for JBoss7 monitoring with Monitis. The monitor uses JBoss7 JSON/HTTP management interface
+ *  to collect statistics and the Monitis Open API to upload them to Monitis
+ *  
  * @author Drago Z Kamenov
- *	This class implements a custom monitor for JBoss7 monitoring with Monitis
  */
 public class JBoss7Monitor extends IGenericCustomMonitor {
 	public static final String CONFIG_FILE = "properties/monitor.config";
@@ -37,8 +38,12 @@ public class JBoss7Monitor extends IGenericCustomMonitor {
 	private String monitorType;
 	private List<MonResultParameter> resultParams;
 
-	/*
-	 * Main method - invoke this from the command line
+
+	/**
+	 * This gets invoked from the command-line
+	 * 
+	 * @param args No command-line arguments are necessary
+	 * @throws Exception
 	 */
 	public static void main(String[] args) throws Exception {
 		JBoss7Monitor mon = new JBoss7Monitor();
@@ -47,7 +52,9 @@ public class JBoss7Monitor extends IGenericCustomMonitor {
 	}
 
 	
-	/** Instantiate a monitor with default settings
+	/** 
+	 * Instantiate a monitor with default settings
+	 * 
 	 * @throws Exception
 	 */
 	public JBoss7Monitor() throws Exception {
@@ -77,13 +84,18 @@ public class JBoss7Monitor extends IGenericCustomMonitor {
 		}
 	}
 
+	/** Unused - this monitor does not provide additional results
+	 * @see org.monitis.GenericCustomMonitor.IGenericCustomMonitor#get_additionalResults()
+	 */
 	@Override
 	public JSONArray get_additionalResults() {
 		return null;
 	}
 
 	
-	/* This method will be called by the CustomMonitorRunner to collect the data
+	/**
+	 *  This method will be called by the CustomMonitorRunner to collect the data. We use the ManagementClient to invoke a management operation on JBoss7
+	 *  
 	 * @see org.monitis.GenericCustomMonitor.IGenericCustomMonitor#get_results()
 	 */
 	@Override
@@ -116,23 +128,34 @@ public class JBoss7Monitor extends IGenericCustomMonitor {
 		}
 	}
 
+	/** Unused - this monitor does not have additional parameters
+	 * @see org.monitis.GenericCustomMonitor.IGenericCustomMonitor#get_additionalResultParams()
+	 */
 	@Override
 	public List<MonResultParameter> get_additionalResultParams() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/** A getter method for the Monitis API Key
+	 * @see org.monitis.GenericCustomMonitor.IGenericCustomMonitor#get_apiKey()
+	 */
 	@Override
 	public String get_apiKey() {
 		return apiKey;
 	}
 
+	/** Unused - this monitor does not require any parameters
+	 * @see org.monitis.GenericCustomMonitor.IGenericCustomMonitor#get_monitorParams()
+	 */
 	@Override
 	public List<MonitorParameter> get_monitorParams() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/** Invoked by the MonitorRunner to get the name of the monitor. This is how the monitor will be named in the Monitis dashboard
+	 * @see org.monitis.GenericCustomMonitor.IGenericCustomMonitor#get_monitor_name()
+	 */
 	@Override
 	public String get_monitor_name() {
 		return monitorName;
@@ -148,6 +171,9 @@ public class JBoss7Monitor extends IGenericCustomMonitor {
 		return monitorType;
 	}
 
+	/** This method is invoked by the MonitorRunner in order to get a description of the monitored fields.
+	 * @see org.monitis.GenericCustomMonitor.IGenericCustomMonitor#get_resultParams()
+	 */
 	@Override
 	public List<MonResultParameter> get_resultParams() {
 		return resultParams;
@@ -182,6 +208,9 @@ public class JBoss7Monitor extends IGenericCustomMonitor {
 		return retval;
 	}
 
+	/** Getter method for API Secret Key
+	 * @see org.monitis.GenericCustomMonitor.IGenericCustomMonitor#get_secretKey()
+	 */
 	@Override
 	public String get_secretKey() {
 		return secretKey;

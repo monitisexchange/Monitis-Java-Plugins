@@ -15,9 +15,8 @@ import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
 
-/**
+/** This class is used by the JBoss7 Custom Monitor to execute management operation against JBoss 7's HTTP/JSON management interface
  * @author Drago Z Kamenov
- * This class is used by the JBoss7 Custom Monitor to execute management operation against JBoss 7's HTTP/JSON management interface
  */
 public class ManagementClient {
 	private String userName = "";
@@ -26,27 +25,38 @@ public class ManagementClient {
 	private int port = 9990;
 	private Logger logger = Logger.getLogger(getClass());
 	
+	/** A getter method for JBoss 7 admin username
+	 * @return user admin username
+	 */
 	public String getUserName() {
 		return userName;
 	}
 
+	/** Use this to set the JBoss 7 admin username
+	 * @param userName admin username
+	 */
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
 
+	/** Get the JBoss 7 admin password
+	 * @return admin password
+	 */
 	public String getPassword() {
 		return password;
 	}
 
+	/** Sets the jboss 7 admin password
+	 * @param password admin password
+	 */
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
 	
-	/**
-	 * Instantiate the ManagementClient
-	 * @param userName
-	 * @param password
+	/** Instantiate the ManagementClient
+	 * @param userName JBoss admin username (used for HTTP authentication)
+	 * @param password JBoss admin password
 	 */
 	public ManagementClient(String userName, String password) {
 		logger.debug("Instantiating new ManagementClient");
@@ -55,8 +65,8 @@ public class ManagementClient {
 	}
 
 	
-	/** Execute a management operation against the JBoss server via HTTP, and perform authentication as needed
-	 * @param urlCmd URL for management command, including parameters, but excluding host and port
+	/** Execute a management operation against the JBoss server via HTTP, and perform authentication as needed. The response is then returned to the caller
+	 * @param urlCmd URL for management command, including parameters, but excluding schema, host and port number
 	 * @return JSONObject containing the response
 	 */
 	public JSONObject executeOp(String urlCmd) {
@@ -98,18 +108,30 @@ public class ManagementClient {
         }
     }
 
+	/** Gets the host name of the monitored JBoss 7 server
+	 * @return host name
+	 */
 	public String getHost() {
 		return host;
 	}
 
+	/** Sets the hostname for the monitored JBoss 7 server
+	 * @param host host name or IP address
+	 */
 	public void setHost(String host) {
 		this.host = host;
 	}
 
+	/** Gets JBoss 7 HTTP management port
+	 * @return port number
+	 */
 	public int getPort() {
 		return port;
 	}
 
+	/** Sets the JBoss 7 HTTP management port
+	 * @param port port number (usually 9990)
+	 */
 	public void setPort(int port) {
 		this.port = port;
 	}

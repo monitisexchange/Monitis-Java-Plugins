@@ -1,5 +1,9 @@
 package org.monitis.monitor.jboss7;
 
+/** This is a simple Exception class to wrap various lower-level exceptions
+ * @author Drago Z Kamenov
+ *
+ */
 public class MonitorException extends RuntimeException {
 
 	/**
