@@ -1,6 +1,7 @@
 ## The Monitis Log4J Appender ##
 
-The MonitisAppender represents the Java implementation of a Log4j appender which allows to send selectively log records from any Java application (that uses Log4J) into Monitis via the Monitis open API.  This project uses the Log4j extension possibility and the Monitis custom monitor approach to provide a simple solution for users whose only alternative is to implement a polling function against the output of a standard Log4j appender.  
+The MonitisAppender represents the Java implementation of a Log4j appender which allows to send selectively log records from any Java application (that uses Log4J) into Monitis via the Monitis open API.  
+This project uses the Log4j extension possibility and the Monitis custom monitor approach to provide a simple solution for users whose only alternative is to implement a polling function against the output of a standard Log4j appender.  
 
 Requirements for monitored application is the following:
 
@@ -34,7 +35,8 @@ where:
   - monitisMonitorTag is tag value for user monitors
   - monitisSendInterval is time interval [ms] between sending monitored info into Monitis
   - ConversationPattern is the pattern that will be used by MonitisAppender to format records
-  - filterPattern is a pattern-string for selection of log records that you want to monitor
+  - filterPattern is a pattern-string for selection of log records that you want to monitor.   
+    This should be composed as a Java RegExp and correspond to Java Pattern.matches requirements.  
     (default is no any pattern - so all records will be sent to Log Monitor)
   - minAllowedLevel is the log records level (ERROR, WARN, DEBUG, etc.) that you want to monitor
     (default value is WARN)
