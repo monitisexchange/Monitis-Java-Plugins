@@ -1,7 +1,9 @@
 ## The Monitis Log4J Appender ##
 
-The MonitisAppender represents the Java implementation of a Log4j appender which allows to send selectively log records from any Java application (that uses Log4J) into Monitis via the Monitis open API.  
-This project uses the Log4j extension possibility and the Monitis custom monitor approach to provide a simple solution for users whose only alternative is to implement a polling function against the output of a standard Log4j appender.  
+The MonitisAppender represents the Java implementation of a Log4j appender which allows to send selectively log records   
+from any Java application (that uses Log4J) into Monitis via the Monitis open API.  
+This project uses the Log4j extension possibility and the Monitis custom monitor approach to provide a simple solution  
+for users whose only alternative is to implement a polling function against the output of a standard Log4j appender.  
 
 Requirements for monitored application is the following:
 
@@ -76,13 +78,17 @@ After sometime there was accumulated some numbers of data so the results can be 
 To do so, user should login to Monitis his account and add a new custom monitor into dashboard.  
 
 
-You can see the default view of monitored data [Click to access picture](https://github.com/shunanya/Monitis-Log4J-Appender/tree/master/log_simulator/test/default.png "Default representation of monitored log data.") .  
+You can see the default view of monitored data.  
 
+<a href="http://i1175.photobucket.com/"><img src="http://i1175.photobucket.com/albums/r634/hsimon2012/a22457a1.png" title="Log4j test" /></a>
 
-By double-clicking on any line of default view you will see the detailed log records [Click to access picture](https://github.com/shunanya/Monitis-Log4J-Appender/tree/master/log_simulator/test/detailed.png "Detailed representation of monitored log data.") .  
+By double-clicking on any line of default view you will see the detailed log records.  
 
+<a href="http://i1175.photobucket.com/"><img src="http://i1175.photobucket.com/albums/r634/hsimon2012/2d3b3271.png" title="Log4j test" /></a>
 
-Also the Graphical representation of monitored data can be shown by switching to the corresponding view [Click to access picture](https://github.com/shunanya/Monitis-Log4J-Appender/tree/master/log_simulator/test/graph.png "Graphical representation of monitored log data.").  
+Also the Graphical representation of monitored data can be shown by switching to the corresponding view.  
+
+<a href="http://i1175.photobucket.com/"><img src="http://i1175.photobucket.com/albums/r634/hsimon2012/f5034d54.png" title="Log4j test" /></a>
 
 
 
