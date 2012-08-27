@@ -1,6 +1,6 @@
 ## Tomcat JMXMonitor ##
 
-This Tocat monitor represents the implementation of a standalone [JMX client](https://github.com/monitisexchange/Monitis-Java-Plugins/tree/master/JMX-Monitor) which allows to get Mbeans attributes values from any Java application and send them into Monitis via the Monitis open API.  
+This Tomcat monitor represents the implementation of a standalone [JMX client](https://github.com/monitisexchange/Monitis-Java-Plugins/tree/master/JMX-Monitor) which allows to get Mbeans attributes values from any Java application and send them into Monitis via the Monitis open API.  
 This project uses the Java Management Extensions possibilities and the Monitis custom monitor approach for providing of a simple solution for users who wants to monitor Tomcat Java application.  
 The current monitor is tunned to monitor the Apache Tomcat few important metrics.  
 
@@ -24,7 +24,14 @@ The only requirements is the following:
 Notes:
 
   - JMX server doesn't have any default port. You can choose anyone free port. The first available port is set when 0 value is specified  as port.
-  - After you have enabled the JMX agent for remote or local use, you can monitor Tomcat application using presented JMXMonitor.
+  - After you have enabled the JMX agent for remote or local use, you can monitor Tomcat application using presented JMXMonitorCustom monitor built with Pentaho Data Integration suite for
+monitoring/sharing results of SQL query run on test database.
+authentication.ktr – transformation implementing authentication token
+request providing API and secret keys
+create_cm.ktr – transformation for creating monitor with given Name,
+Tag, Type and Parameters description
+results_cm.ktr – transformation, responsible for posting monitoring results
+results_cm.kjb – job for results_cm.ktr.
 
 
 #### The project contain the following sources: ####
