@@ -22,13 +22,16 @@ import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
 
+import org.apache.log4j.Logger;
+
 import com.sun.tools.attach.AttachNotSupportedException;
 import com.sun.tools.attach.VirtualMachine;
 import com.sun.tools.attach.VirtualMachineDescriptor;
 
 public class JMXClient {
 	private HashMap<MBeanServerConnection, JMXConnector> connections = new HashMap<MBeanServerConnection, JMXConnector>();
-
+	private Logger logger = Logger.getLogger(JMXClient.class);
+	
 	public String getJMXlocalConnectorAddress(String command){
 		List<VirtualMachineDescriptor> vms = VirtualMachine.list();
 		String connectorAddress = null;
@@ -42,19 +45,19 @@ public class JMXClient {
 		    } catch (AttachNotSupportedException e) {
 		        continue;
 		    } catch (IOException e) {
-				System.out.println("VirtualMachine.attach exeption: "+e.toString());
+				logger.warn("VirtualMachine.attach exeption: "+e.toString());
 			}
 			try {
 				Properties props = vm.getAgentProperties();
 				props.list(System.out);
 				String cmd = props.getProperty("sun.java.command");//.toLowerCase();
-				System.out.println("cmd = "+cmd);
+				logger.info("cmd = "+cmd);
 				if (!(cmd.equals(command) || cmd.contains(command))){
 					continue;
 				}
 				connectorAddress = props.getProperty("com.sun.management.jmxremote.localConnectorAddress");
 			} catch (Exception e){
-				System.out.println("VirtualMachine propertiesh exception: "+e.toString());		    	
+				logger.warn("VirtualMachine propertiesh exception: "+e.toString());		    	
 		    }
 		    if (connectorAddress == null) {
 		        continue;
@@ -82,7 +85,7 @@ public class JMXClient {
 		HashMap<String, Object> environment = new HashMap<String, Object>();
 		environment.put("jmx.remote.x.client.connection.check.period", 5000);// Add environment variable to check for dead connections.
 		if (username != null && password != null) {
-			environment = new HashMap<String, Object>();
+//			environment = new HashMap<String, Object>();
 			environment.put(JMXConnector.CREDENTIALS, new String[] { username, password });
 			connector = JMXConnectorFactory.connect(serviceUrl, environment);
 		} else {
