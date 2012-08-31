@@ -1,7 +1,9 @@
 ## Tomcat JMXMonitor ##
 
-This Tomcat monitor represents the implementation of a standalone [JMX client](https://github.com/monitisexchange/Monitis-Java-Plugins/tree/master/JMX-Monitor) which allows to get Mbeans attributes values from any Java application and send them into Monitis via the Monitis open API.  
-This project uses the Java Management Extensions possibilities and the Monitis custom monitor approach for providing of a simple solution for users who wants to monitor Tomcat Java application.  
+This Tomcat monitor represents the implementation of a standalone [JMX client](https://github.com/monitisexchange/Monitis-Java-Plugins/tree/master/JMX-Monitor)  
+which allows to get Mbeans attributes values from any Java application and send them into Monitis via the Monitis open API.  
+This project uses the Java Management Extensions possibilities and the Monitis custom monitor approach for providing of a simple  
+solution for users who wants to monitor Tomcat Java application.  
 The current monitor is tunned to monitor the Apache Tomcat few important metrics.  
 
 #### Monitored Application ####
@@ -24,14 +26,7 @@ The only requirements is the following:
 Notes:
 
   - JMX server doesn't have any default port. You can choose anyone free port. The first available port is set when 0 value is specified  as port.
-  - After you have enabled the JMX agent for remote or local use, you can monitor Tomcat application using presented JMXMonitorCustom monitor built with Pentaho Data Integration suite for
-monitoring/sharing results of SQL query run on test database.
-authentication.ktr – transformation implementing authentication token
-request providing API and secret keys
-create_cm.ktr – transformation for creating monitor with given Name,
-Tag, Type and Parameters description
-results_cm.ktr – transformation, responsible for posting monitoring results
-results_cm.kjb – job for results_cm.ktr.
+  - After you have enabled the JMX agent for remote or local use, you can monitor Tomcat application using presented JMXMonitor Custom monitor.
 
 
 #### The project contain the following sources: ####
@@ -80,13 +75,14 @@ The _monitor.config_ file is used to configure JMXMonitor. It should be prepared
 		"processingTime": "1",                               <- The periodicity of sending measuring data into Monitis [min]
 		"params_separator": ":",                             <- The separator
 		"result_params":[                                    <- The array of definitions for send parameters into Monitis (each element of array is JSON object)
-		    {"attribute":"bytesSent","jmxObject":"Catalina:type=GlobalRequestProcessor,name=http-XXXX","format":"bytesSent:bytesSent:dif:2", "calculate":1},
-		    {"attribute":"bytesReceived","jmxObject":"Catalina:type=GlobalRequestProcessor,name=http-XXXX","format":"bytesReceived:bytesReceived:dif:2", "calculate":1},
-		    {"attribute":"processingTime","jmxObject":"Catalina:type=GlobalRequestProcessor,name=http-XXXX","format":"processingTime:processingTime:dif:2", "calculate":1},
+		    {"attribute":"Uptime","jmxObject":"java.lang:type=Runtime","format":"Uptime:Uptime::3", "calculate":4},
+		    {"attribute":"bytesSent","jmxObject":"Catalina:type=GlobalRequestProcessor,name=http-XXXX","format":"bytesSent:bytesSent:bps:4", "calculate":2},
+		    {"attribute":"bytesReceived","jmxObject":"Catalina:type=GlobalRequestProcessor,name=http-XXXX","format":"bytesReceived:bytesReceived:bps:4", "calculate":2},
+		    {"attribute":"processingTime","jmxObject":"Catalina:type=GlobalRequestProcessor,name=http-XXXX","format":"processingTime:averageResponseTime:tps:4", "calculate":2},
 		    {"attribute":"errorCount","jmxObject":"Catalina:type=GlobalRequestProcessor,name=http-XXXX","format":"errorCount:errorCount:dif:2", "calculate":1},
 		    {"attribute":"maxTime","jmxObject":"Catalina:type=GlobalRequestProcessor,name=http-XXXX","format":"maxTime:maxTime::2", "calculate":0},
 		    {"attribute":"requestCount","jmxObject":"Catalina:type=GlobalRequestProcessor,name=http-XXXX","format":"requestCount:requestCount:dif:2", "calculate":1},
-		    {"attribute":"requestCount","jmxObject":"Catalina:type=GlobalRequestProcessor,name=http-XXXX","format":"requestCountps:requestCount:ps:2", "calculate":2},
+		    {"attribute":"requestCount","jmxObject":"Catalina:type=GlobalRequestProcessor,name=http-XXXX","format":"requestCountps:requestCount:rps:4", "calculate":2},
 		    {"attribute":"maxThreads","jmxObject":"Catalina:type=ThreadPool,name=http-XXXX","format":"maxThreads:maxThreads::2", "calculate":0},
 		    {"attribute":"currentThreadsBusy","jmxObject":"Catalina:type=ThreadPool,name=http-XXXX","format":"currentThreadsBusy:currentThreadsBusy::2", "calculate":0},
 		    {"attribute":"currentThreadCount","jmxObject":"Catalina:type=ThreadPool,name=http-XXXX","format":"currentThreadCount:currentThreadCount::2", "calculate":0}
@@ -102,8 +98,10 @@ The _monitor.config_ file is used to configure JMXMonitor. It should be prepared
 
 Note:  
 
-  - The JMXMonitor is trying to establish a local connection with JMX of monitored application by using the application start command (if specified) or uses the defined jmxport number and host for both local/remote connections. So, you can specify one of them. If you are defining these both parameters then the JMXMonitor tries firstly to establish connection by using the application start command and if it is failed uses a port and host.
-  - You can obtain the list of existing MBeans and their attributes by using e.g. JConsole (supplied with J2SE) or any other JMX browser (e.g. <a href="https://github.com/monitisexchange/Monitis-Java-Plugins/tree/master/JMX-Browser">JMX-Browser</a>).
+  - The JMXMonitor is trying to establish a local connection with JMX of monitored application  
+    by using the application start command (if specified) or uses the defined jmxport number and host for both local/remote connections.  
+    So, you can specify one of them. If you are defining these both parameters then the JMXMonitor tries firstly to establish connection  
+    by using the application start command and if it is failed uses a port and host.
   - If some of specified MBeans aren't accessible for some reason then the corresponding data will be ommitted and will not be sent into Monitis.
  
 There are some peculiarities while composing of result parameters part in the configuration file  
@@ -119,8 +117,11 @@ There are some peculiarities while composing of result parameters part in the co
         - 1 - calculate absolute difference between current and previous results
         - 2 - calculate rate of changes between current and previous results per sec
         - 3 - calculate percentage of difference between current and previous results
+        - 4 - tranform to time format (days-hours.min.sec)
 
 Please Note that every necessary metrics can be easily added into set of measurement by creating composition for new JSON formatted line in the "result_params" part.  
+If you want to add some other metrics you can obtain the list of existing MBeans and their attributes by using e.g. JConsole (supplied with J2SE)  
+or any other JMX browser (e.g. <a href="https://github.com/monitisexchange/Monitis-Java-Plugins/tree/master/JMX-Browser">JMX-Browser</a>).
 
 #### Testing and results ####
 
@@ -139,6 +140,8 @@ To check the correctness of Tomcat monitor workability, the wollowing environmen
              -Dcom.sun.management.jmxremote="true" 
              -Dcom.sun.management.jmxremote.ssl="false" 
              -Dcom.sun.management.jmxremote.local.only="false" 
+             .....
+             org.apache.catalina.startup.Bootstrap start
 
   -  The Load simulator has been used to generate the quite enough load into server and request for various Web Application pages
 

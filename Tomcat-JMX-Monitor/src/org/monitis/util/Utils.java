@@ -127,7 +127,7 @@ public class Utils {
 		int min = (int) Math.floor((time / 60000) % 60);
 		int hr = (int) Math.floor((time / 3600000) % 24);
 		int da = (int) Math.floor(time / 86400000);
-		return String.format("%d day %02d:%02d:%02d", da, hr, min, sec);
+		return String.format("%d-%02d.%02d.%02d", da, hr, min, sec);
 	}
 	
 	/**

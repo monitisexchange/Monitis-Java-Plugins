@@ -197,6 +197,12 @@ public class JMXMonitor extends IGenericCustomMonitorWrapper {
 					} catch (Exception e) {/* ignore */
 					}
 					break;
+				case 4: // time format
+					try{
+						value = Utils.toFormatedTime(Long.valueOf(value));
+					}catch (Exception e) {/* ignore */
+					}
+					break;
 				}
 
 				ret = new MonResult(name, value);
