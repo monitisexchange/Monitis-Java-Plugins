@@ -43,6 +43,22 @@ Notes:
 
 Please notice that we are using in this project the cropped Open API Java library - m_api.jar (the custom monitor strongly needed functionality have been kept only)  
 
+#### Tomcat Server monitored metrics ####
+
+The current monitor provides measurement for the following set of metrics
+
+  - Uptime - The duration of uninterruptable Tomcat Server work.
+  - bytesSent - The amount of bytes sent to the clients per second
+  - bytesReceived - The amount of bytes received by server per second
+  - averageResponseTime - The average response processing time for request per second
+  - errorCount - Number of errors while requests processing during monitoring period.
+  - maxTime - Maximum time it took to process a request.
+  - requestCount - The number of requests processed during monitoring period.
+  - requestCountps - The average number of requests processed per second.
+  - maxThreads - Maximum number of threads that can be allocated for the ThreadPool.
+  - currentThreadsBusy - Number of current busy threads.
+  - currentThreadCount - Number of current threads.
+
 #### Tomcat Monitor configuration ####
 
 The _monitor.config_ file is used to configure JMXMonitor. It should be prepared in JSON form and has the following structure.
@@ -78,9 +94,9 @@ The _monitor.config_ file is used to configure JMXMonitor. It should be prepared
 		    {"attribute":"Uptime","jmxObject":"java.lang:type=Runtime","format":"Uptime:Uptime::3", "calculate":4},
 		    {"attribute":"bytesSent","jmxObject":"Catalina:type=GlobalRequestProcessor,name=http-XXXX","format":"bytesSent:bytesSent:bps:4", "calculate":2},
 		    {"attribute":"bytesReceived","jmxObject":"Catalina:type=GlobalRequestProcessor,name=http-XXXX","format":"bytesReceived:bytesReceived:bps:4", "calculate":2},
-		    {"attribute":"processingTime","jmxObject":"Catalina:type=GlobalRequestProcessor,name=http-XXXX","format":"processingTime:averageResponseTime:tps:4", "calculate":2},
+		    {"attribute":"processingTime","jmxObject":"Catalina:type=GlobalRequestProcessor,name=http-XXXX","format":"processingTime:averageResponseTime:ms:4", "calculate":2},
 		    {"attribute":"errorCount","jmxObject":"Catalina:type=GlobalRequestProcessor,name=http-XXXX","format":"errorCount:errorCount:dif:2", "calculate":1},
-		    {"attribute":"maxTime","jmxObject":"Catalina:type=GlobalRequestProcessor,name=http-XXXX","format":"maxTime:maxTime::2", "calculate":0},
+		    {"attribute":"maxTime","jmxObject":"Catalina:type=GlobalRequestProcessor,name=http-XXXX","format":"maxTime:maxTime:ms:2", "calculate":0},
 		    {"attribute":"requestCount","jmxObject":"Catalina:type=GlobalRequestProcessor,name=http-XXXX","format":"requestCount:requestCount:dif:2", "calculate":1},
 		    {"attribute":"requestCount","jmxObject":"Catalina:type=GlobalRequestProcessor,name=http-XXXX","format":"requestCountps:requestCount:rps:4", "calculate":2},
 		    {"attribute":"maxThreads","jmxObject":"Catalina:type=ThreadPool,name=http-XXXX","format":"maxThreads:maxThreads::2", "calculate":0},
@@ -148,12 +164,12 @@ To check the correctness of Tomcat monitor workability, the wollowing environmen
 After sometime there was accumulated enought numbers of data so the results can be viewed on the [Monitis dashboard](http://www.monitis.com) of user.  
 To do so, user should login to Monitis his account and add a new custom monitor into dashboard (Monitors -> Manage Monitors -> Custom Monitors).  
 
-<a href="http://i.imgur.com/0sphl"><img src="http://i.imgur.com/0sphl.png" title="TomcatMonitor test" /></a> .  
+<a href="http://i.imgur.com/ACSFC"><img src="http://i.imgur.com/ACSFC.png" title="TomcatMonitor test" /></a> .  
 
 
 Also the Graphical representation of monitored data can be shown by switching to the corresponding view  
 
-<a href="http://i.imgur.com/tjPGE"><img src="http://i.imgur.com/tjPGE.png" title="TomcatMonitor test" /></a> .  
+<a href="http://i.imgur.com/teDjz"><img src="http://i.imgur.com/teDjz.png" title="TomcatMonitor test" /></a> .  
 
 
 
