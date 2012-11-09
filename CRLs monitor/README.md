@@ -32,23 +32,23 @@ _Note: please don't change the  non-commented lines due to unpredictable effects
       "version": "2"
   },
   "user_account":{
-      "apiKey": "T5BAQQ46JPTGR6EBLFE28OSSQ",       <- ApiKey that can be obtained from your Monitis accoun
-      "secretKey": "248VUB2FA3DST8J31A9U6D9OHT"    <- SecretKey that can be obtained from your Monitis account
+      "apiKey": "T5BAQQ46JPTGR6EBLFE28OSSQ",       - ApiKey that can be obtained from your Monitis accoun
+      "secretKey": "248VUB2FA3DST8J31A9U6D9OHT"    - SecretKey that can be obtained from your Monitis account
   },  
   "debug": {
-      "file": "./mon.csv",                         <- Path to debug file
-      "turn_on": no                                <- Debug option (if "yes" the measuring results will be put 
+      "file": "./mon.csv",                         - Path to debug file
+      "turn_on": no                                - Debug option (if "yes" the measuring results will be put 
                                                              into local csv file instead of send into Monitis)
   },
   "monitor":{
-      "crl_uri": "http://public.wisekey.com/crl/", <- CRLs location path (you can put here both the path 
+      "crl_uri": "http://public.wisekey.com/crl/", - CRLs location path (you can put here both the path 
                                                           to the list of crls as well as to concrete CRL) 
-      "name": "CRL monitor",                       <- Name of Monitor
-      "tag": "CRL",                                <- Tag of Monitor
-      "type": "Java",                              <- Type of Monitor
+      "name": "CRL monitor",                       - Name of Monitor
+      "tag": "CRL",                                - Tag of Monitor
+      "type": "Java",                              - Type of Monitor
       "multivalue":true,
-      "testDuration": "0",                         <- Test duration in minutes (0 for infinite test)
-      "processingTime": "1",                       <- Perodicity of testing in minutes
+      "testDuration": "0",                         - Test duration in minutes (0 for infinite test)
+      "processingTime": "1",                       - Perodicity of testing in minutes
       "params_separator": ":",
       "result_params":[
          {"format":"status:status::3"},
