@@ -7,14 +7,19 @@ The Repository contains the following
 
         src
           org.monitis.monitor.crl
-            CRLMonitor.java         CRL cusom monitor implementation
+            CRLMonitor.java          CRL cusom monitor implementation
           org.monitis.util
-            Utils.java              Utilities class
+            Utils.java               Utilities class
         lib
           m_api.jar                  The latest (3.0) version of Monitis Java SDK wrapper for Monitis Open API  
           crl.jar                    CRLs support library
-          jsoup-1.7.1.jar	     HTML parse data support library
+          jsoup-1.7.1.jar            HTML parse data support library
           ....
+        properties
+          monitor.config             Configuration for monitor
+          log4j.xml                  Configuration for logger
+        bin
+          crl_monitor.jar            CRL monitor executable jar file 
 
 The lib folder contains also other libraries that is depend on m-api.jar.  
 
@@ -66,6 +71,9 @@ _Note: please don't change the  non-commented lines due to unpredictable effects
 </pre>
 
 That is all.  
+You can now run executable Jar file by using the following command  
+
+        java -jar crl_monitor.jar
 
 Please note that we are presenting the sample approach only and naturally you can freely modify the code to reach your desired result.  
 For more explanations you can look through article [Monitis CRLs validation](http://blog.monitis.com/index.php/2012/11/10/monitis-crls-validation/)
