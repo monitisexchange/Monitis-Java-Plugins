@@ -21,8 +21,10 @@ public class JMXBrowse {
 	private int port;
 	private String username = null;
 	private String password = null;
+	private String format = null;
 	private String file = null;
 	private String separator;
+	private boolean number_only = false;
 	private static String[] line = {"Object", "Attribute", "Key", "Value"};
 	private final static String config_path = "properties/jmxconfig.json"; 
 	private boolean isDebug = false;
@@ -37,8 +39,10 @@ public class JMXBrowse {
 		port = conf.getConfigIntValue("object.access.port", 0);
 		username = conf.getConfigStringValue("object.access.username");
 		password = conf.getConfigStringValue("object.access.password");
-		file = conf.getConfigStringValue("output.path");
+		format = conf.getConfigStringValue("output.format", "csv");
+		file = conf.getConfigStringValue("output.path")+System.getProperty("file.separator")+"jmx."+format;
 		separator = conf.getConfigStringValue("output.separator", ",");
+		number_only = conf.getConfigBooleanValue("output.number_only");
 		isDebug = conf.getConfigBooleanValue("test.debug");
 		if (isDebug)
 			System.out.println(getPrintParams());
@@ -95,7 +99,11 @@ public class JMXBrowse {
 		}
 		if (file != null) {
 			System.out.println("\nResults of MBeans browsing was saved in "+file);
-			Utils.putIntoCSV(file, false, separator, line);// put Header
+			if (format.equals("csv")){// put header line 
+				Utils.putIntoCSV(file, true, separator, line);
+			} 
+		} else {
+			System.out.println(line[0] + ", " + line[1] + ", " + line[2] + ", " + line[3]);
 		}
 
 		try{
@@ -120,28 +128,47 @@ public class JMXBrowse {
 								} catch (Exception e) {
 									continue;
 								}
-								if (attr[i].getType().contains("CompositeData")){// Composite attribute
+								String type = attr[i].getType().toLowerCase();
+								if (type.contains("compositedata")){// Composite attribute
 									Set<String> keys = ((CompositeDataSupport) value).getCompositeType().keySet();
+//									System.out.println("Composite = ");
 									for (String key : keys) {
-										line[0] = object;
-										line[1] = attr[i].getName();
-										line[2] = key;
-										line[3] = String.valueOf(((CompositeDataSupport) value).get(key));
-										if (file != null) 
-											Utils.putIntoCSV(file, true, separator, line);// put next line values
-										else
-											System.out.println(line[0] + ", " + line[1] + ", " + line[2] + ", " + line[3]);
+										Object key_value = ((CompositeDataSupport) value).get(key);
+										type = key_value.getClass().getSimpleName().toLowerCase();
+//										System.out.println("Type = "+key_value.getClass().getSimpleName());
+										if (number_only && !(type.contains("int") || type.contains("long") || type.contains("float") || type.contains("double"))) {
+											continue;
+										} else {
+											line[0] = object;
+											line[1] = attr[i].getName();
+											line[2] = key;
+											line[3] = String.valueOf(key_value);
+											if (file != null)
+												if (format.equals("csv")) {// put next line values
+													Utils.putIntoCSV(file, true, separator, line);
+												} else {
+													Utils.putAsJson(file, true, line);
+												}
+											else
+												System.out.println(line[0] + ", " + line[1] + ", " + line[2] + ", " + line[3]);
+										}
 									}
-								} else {// Simple attribute
-								// System.out.println(strb);
-								line[0] = object;
-								line[1] = attr[i].getName();
-								line[2] = "";
-								line[3] = String.valueOf(value);
-								if (file != null) 
-									Utils.putIntoCSV(file, true, separator, line);// put next line values
-								else
-									System.out.println(line[0] + ", " + line[1] + ", " + line[2] + ", " + line[3]);
+								} else if (number_only && !(type.contains("int") || type.contains("long") || type.contains("float") || type.contains("double"))) {// Numeric attribute
+									continue;
+								} else {
+									line[0] = object;
+									line[1] = attr[i].getName();
+									line[2] = "";
+									line[3] = String.valueOf(value);
+									if (file != null)
+										if (format.equals("csv")) {// put next line values
+											Utils.putIntoCSV(file, true, separator, line);
+										} else {
+											Utils.putAsJson(file, true, line);
+										}
+									else {
+										System.out.println(line[0] + ", " + line[1] + ", " + line[2] + ", " + line[3]);
+									}
 								}
 							} 
 						} catch (Exception ex) {/* ignore */}

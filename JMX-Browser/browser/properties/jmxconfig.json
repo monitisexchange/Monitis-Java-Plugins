@@ -1,9 +1,9 @@
 {
   "object":{
-  	  "command": "JMXServer.jar",
+  	  "command": "processor.jar",
       "access":{
 		  "host": "127.0.0.1",
-		  "port": 7199,
+		  "port": 0,
 		  "username": null,
 		  "password": null
       }
@@ -12,7 +12,9 @@
       "debug": false
   },
   "output": {
-      "path": "tmp/jmx.csv",
+  	  "number_only": true,
+      "format": "json",
+      "path": "/home/shunanya/tmp",
       "separator": "|"
   }
 }
