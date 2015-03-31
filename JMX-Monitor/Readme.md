@@ -10,10 +10,10 @@ through a protocol adaptor or connector.
 #### Monitored Application ####
 
 You don't need to do any changes in your application at all.  
-The only requirements for monitored application is the following:  
+The only requirements for monitored application is the following (optional):  
 
-  - The JMX agent should be enabled on the monitored application JVM and be implemented on J2SE version 5 or higher.
-  - The monitored application should be started by using the following parameters
+  - The monitored application should be implemented on J2SE version 5 or higher.
+  - The monitored application can be started by using the following parameters
  
         java -Dcom.sun.management.jmxremote.port=<port number>          <- Creates a remote JMX connector to listen through the specified port.
              -Dcom.sun.management.jmxremote.authenticate="true/false"   <- Use (or not) a passwords to access MBeans.
@@ -22,12 +22,11 @@ The only requirements for monitored application is the following:
              -Dcom.sun.management.jmxremote.local.only="true/false"     <- Allows (or not) establish any connection requests from local interfaces only.
              <application class>                                        <- Your application class that contains main method.
 
-
-
 Notes:
 
   - JMX server doesn't have any default port. You can choose anyone free port. The first available port is set when 0 value is specified as port.
   - After you have enabled the JMX agent for remote or local use, you can monitor your application using presented JMXMonitor.
+  - The monitor will try to connect to JMX server in the monitored application JVM by using some alternate technologies if no any above mention parameters is specified.
 
 
 #### The project contain the following sources: ####
@@ -54,7 +53,7 @@ It should be prepared in JSON form and has the following structure.
    <pre markdown="1">
 	{
 	  "api":{
-	      "server": "http://monitis.com",                        <- Monitis server URL that support Monitis Open API <i>(optional; the default value - http://monitis.com)</i>
+	      "server": "http://api.monitis.com",                    <- Monitis server URL that support Monitis Open API <i>(optional; the default value - http://monitis.com)</i>
 	      "version": "2"                                         <- Open API version <i>(optional; the default value - 2)</i>
 	  },
 	  "user_account":{
@@ -63,7 +62,7 @@ It should be prepared in JSON form and has the following structure.
 	  },
 	  "debug": {
 	  	"file": "./mon.csv",                                 <- The file to keeping monitoring data in debug mode
-	  	"turn_on": no                                        <- Turn ON/OFF debug mode (In debug mode the results is stored in the CSV file instead of sending into Monitis)
+	  	"turn_on": yes                                       <- Turn ON/OFF debug mode (In debug mode the results is stored in the CSV file instead of sending into Monitis)
 	  },
 	  "monitor":{
   		"app_command": "Bootstrap",                          <- The monitored application start command 
@@ -103,7 +102,7 @@ It should be prepared in JSON form and has the following structure.
 
 Note:  
 
-  - The JMXMonitor is trying to establish a local connection with JMX of monitored application by using the application start command (if specified)  
+  - The JMXMonitor is trying to establish a local connection with JMX server of monitored application by using the application start command (if specified)  
     or uses the defined port number and host for both local/remote connections. So, you can specify one of them.  
     If you are defining these both parameters then the JMXMonitor tries firstly to establish connection by using the application start command  
     and if it is failed uses a port and host.
