@@ -231,9 +231,9 @@ public class MConfig {
     private void convertJSONtoProperties (JSONObject json, Properties prop, String key) throws Exception{
     	String skey, ckey;
     	if (json != null){
-        	Iterator i = json.keys();
+        	Iterator<String> i = json.keys();
         	while (i.hasNext()) {
-        	    skey = (String)i.next();
+        	    skey = i.next();
         	    if (key == null || key.length() <= 0){
         	    	ckey = skey;
         	    } else {

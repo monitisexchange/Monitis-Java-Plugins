@@ -9,11 +9,9 @@ import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.TimeZone;
-import java.util.zip.Inflater;
-
-import javax.management.openmbean.CompositeDataSupport;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -193,7 +191,7 @@ public class Utils {
 		boolean ret = true;
 		String[] keys = {"jmxObject", "attribute", "key", "value", "format"};
 		int last = keys.length - 1;
-		
+//		System.out.println(Arrays.toString(line));
 		JSONObject json = new JSONObject();
 		for (int i = 0; i < keys.length; i++) {
 			try {
@@ -211,7 +209,7 @@ public class Utils {
 					int beg = 0;
 					int end = line[0].indexOf(sep1);
 					if (end > beg){
-						str += line[0].substring(beg, end);
+//						str += line[0].substring(beg, end);
 					}
 					beg = line[0].indexOf(sep2, end + sep1.length())+sep2.length();
 					end = line[0].indexOf(sep3, beg);

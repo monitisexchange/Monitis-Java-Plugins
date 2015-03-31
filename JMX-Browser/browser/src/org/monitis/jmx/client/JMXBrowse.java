@@ -1,6 +1,7 @@
 package org.monitis.jmx.client;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Set;
 
 import javax.management.MBeanAttributeInfo;
@@ -59,35 +60,36 @@ public class JMXBrowse {
 		return strb.toString();		
 	}
 	
-	public void execute() throws Exception{
+	public void execute() {
 		MBeanServerConnection connection = null;
 		SimpleClient client = new SimpleClient();
 		JMXServiceURL serviceUrl = null;
 				
 		if (java_command != null) {
-			String JMXConnectionAddress = CheckEnvironment.getJMXlocalConnectorAddress(java_command, isDebug);
-			if (JMXConnectionAddress != null && JMXConnectionAddress.length() > 0) {
-				serviceUrl = new JMXServiceURL(JMXConnectionAddress);
-			} else {
-				System.err.println("Couldn't find the JMXConnectionAddress for " + java_command);
+			try {
+				String JMXConnectionAddress = CheckEnvironment.getJMXlocalConnectorAddress(java_command, isDebug);
+				if (JMXConnectionAddress != null && JMXConnectionAddress.length() > 0) {
+					serviceUrl = new JMXServiceURL(JMXConnectionAddress);
+				} else {
+					System.err.println("Couldn't find the JMXConnectionAddress for " + java_command);
+					System.exit(1);
+				}
+				if (serviceUrl == null && host != null && host.length() > 0 && port != 0) {
+					// int pid = Integer.parseInt( ( new File("/proc/self")).getCanonicalFile().getName() );
+					// System.out.println("pid = "+pid);
+					//
+					serviceUrl = new JMXServiceURL("service:jmx:rmi:///jndi/rmi://" + host + ":" + port + "/jmxrmi");
+				}
+				System.out.println("serviceURL = " + serviceUrl);
+				if (serviceUrl == null) {
+					System.err.println("Couldn't connect to required object by JMX. ");
+				} else {
+					connection = client.openConnection(serviceUrl, username, password);
+				} 
+			} catch (Exception e){
+				System.err.println(e);
+				System.exit(1);
 			}
-		}
-		if (serviceUrl == null && host != null && host.length() > 0 && port != 0) {
-			// int pid = Integer.parseInt( ( new File("/proc/self")).getCanonicalFile().getName() );
-			// System.out.println("pid = "+pid);
-			//
-			serviceUrl = new JMXServiceURL("service:jmx:rmi:///jndi/rmi://" + host + ":" + port + "/jmxrmi");
-		}
-		System.out.println("serviceURL = " + serviceUrl);
-		if (serviceUrl == null) {
-			System.err.println("Couldn't connect to required object by JMX. ");
-		}
-
-		try {
-			connection = client.openConnection(serviceUrl, username, password);
-		} catch (Exception e) {
-			System.err.println("Inpossible estalish connection: " + e.getMessage());
-			System.exit(1);
 		}
 		
 		Set<ObjectInstance> beans = null;
@@ -98,6 +100,7 @@ public class JMXBrowse {
 			System.exit(1);
 		}
 		if (file != null) {
+			new File(file).delete();// remove the previously created file
 			System.out.println("\nResults of MBeans browsing was saved in "+file);
 			if (format.equals("csv")){// put header line 
 				Utils.putIntoCSV(file, true, separator, line);
@@ -171,7 +174,7 @@ public class JMXBrowse {
 									}
 								}
 							} 
-						} catch (Exception ex) {/* ignore */}
+						} catch (Exception ex) {/*ignore*/}
 					}
 				}
 			}
@@ -179,7 +182,9 @@ public class JMXBrowse {
 			System.err.println("Exception: " + ex.toString());
 		} finally {
 			if (connection != null)
-				client.closeConnection(connection);
+				try {
+					client.closeConnection(connection);
+				} catch (IOException e) {/*ignore*/}
 		}		
 	}
 	
