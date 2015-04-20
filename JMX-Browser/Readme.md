@@ -31,8 +31,8 @@ The _jmxconfig.json_ file is used to configure JMXBrowser. It should be prepared
 	      "access":{
 			  "host": "127.0.0.1",  <- The tested application host IP <i>(optional; the default value - "localhost")</i>
 			  "port": 7199,         <- The tested application JMX port number <i>(optional; the default value - 0)</i>
-			  "username": null,     <- The tested applcation JMX access credentials (user name)
-			  "password": null      <- The monitored applcation JMX access credentials (user password)
+			  "username": null,     <- The tested applcation JMX access credentials (user name; optional)
+			  "password": null      <- The monitored applcation JMX access credentials (user password; optional)
 	      }
 	  },
 	  "test": {

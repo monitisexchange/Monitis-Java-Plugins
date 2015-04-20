@@ -1,6 +1,7 @@
 package org.monitis.monitor.jmx;
 
 import java.beans.IntrospectionException;
+import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -24,6 +25,8 @@ import javax.management.remote.JMXServiceURL;
 
 import org.apache.log4j.Logger;
 
+import com.sun.tools.attach.AgentInitializationException;
+import com.sun.tools.attach.AgentLoadException;
 import com.sun.tools.attach.AttachNotSupportedException;
 import com.sun.tools.attach.VirtualMachine;
 import com.sun.tools.attach.VirtualMachineDescriptor;
@@ -36,29 +39,38 @@ public class JMXClient {
 		List<VirtualMachineDescriptor> vms = VirtualMachine.list();
 		String connectorAddress = null;
 	    VirtualMachine vm = null;
-	    JMXConnector connector = null;
+//	    JMXConnector connector = null;
 		for (VirtualMachineDescriptor desc : vms) {
 			connectorAddress = null;
 			vm = null;
 		    try {
 		        vm = VirtualMachine.attach(desc);
-		    } catch (AttachNotSupportedException e) {
-		        continue;
-		    } catch (IOException e) {
-				logger.warn("VirtualMachine.attach exeption: "+e.toString());
-			}
-			try {
 				Properties props = vm.getAgentProperties();
 				props.list(System.out);
 				String cmd = props.getProperty("sun.java.command");//.toLowerCase();
 				logger.info("cmd = "+cmd);
 				if (!(cmd.equals(command) || cmd.contains(command))){
+					vm.detach();
 					continue;
 				}
 				connectorAddress = props.getProperty("com.sun.management.jmxremote.localConnectorAddress");
+			    if (connectorAddress == null) {
+			        String agent = vm.getSystemProperties().getProperty("java.home") + File.separator + "lib" + File.separator +  "management-agent.jar";
+			        vm.loadAgent(agent);
+			        Thread.sleep(1000);//waiting for agent load
+					// perhaps agent is started, get the connector address
+					connectorAddress =  vm.getAgentProperties().getProperty("com.sun.management.jmxremote.localConnectorAddress");
+			    }
+		    } catch (AttachNotSupportedException | AgentLoadException | AgentInitializationException | IOException e) {
+		    	System.err.println("VirtualMachine.attach exeption: "+e.toString());
+		        continue;
 			} catch (Exception e){
 				logger.warn("VirtualMachine propertiesh exception: "+e.toString());		    	
-		    }
+	    	} finally {
+			    try {
+					vm.detach();
+				} catch (IOException e) {/*ignore*/}
+			}
 		    if (connectorAddress == null) {
 		        continue;
 		    } else {

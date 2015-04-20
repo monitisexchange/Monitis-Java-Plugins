@@ -2,6 +2,7 @@ package org.monitis.monitor.jmx;
 
 import java.io.File;
 import java.io.IOException;
+import java.rmi.registry.LocateRegistry;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -20,6 +21,25 @@ import org.monitis.beans.MonResult;
 import org.monitis.util.Utils;
 import org.monitis.utils.MConfig;
 
+/**
+ * The JMXMonitor represents the implementation of a standalone JMX client which allows to get Mbeans attributes values 
+ * from any Java application and send them into Monitis via the Monitis open API. 
+ * This project uses the Java Management Extensions possibilities and the Monitis custom monitor approach for providing  
+ * of a simple solution for users who wants to monitor any Java application.
+ * <p>
+ * The JMX agent should be enabled on the monitored application JVM and be implemented on J2SE version 5 or higher.
+ * </p>
+  
+ * <p>
+ * The monitored application should be started by using the following parameters <br>
+ * To do so usually you should add some additional keys when start application:<br>
+ * -Dcom.sun.management.jmxremote.port=<concrete port|0>  0 mean that system should choose the first free port automatically<br> 
+ * -Dcom.sun.management.jmxremote.authenticate=<"true"|"false"> <br>
+ * -Dcom.sun.management.jmxremote=<"true"|"false"> <br>
+ * -Dcom.sun.management.jmxremote.ssl=<"true"|"false"> <br>
+ * -Dcom.sun.management.jmxremote.local.only=<"true"|"false"> <br>
+ * </p>
+ */
 public class JMXMonitor extends IGenericCustomMonitorWrapper {
 	private static String confFile = "/properties/monitor.config";
 	private JMXClient client = null;
@@ -96,7 +116,10 @@ public class JMXMonitor extends IGenericCustomMonitorWrapper {
 				throw new Exception("No data in 'monitor.result_params'");
 			}
 		}
+//		connect();
+	}
 
+	public void connect() throws Exception{
 		client = new JMXClient();
 
 		if (java_command != null) {
@@ -108,9 +131,6 @@ public class JMXMonitor extends IGenericCustomMonitorWrapper {
 			}
 		}
 		if (serviceUrl == null && host != null && host.length() > 0 && jmxport != 0) {
-			// int pid = Integer.parseInt( ( new File("/proc/self")).getCanonicalFile().getName() );
-			// System.out.println("pid = "+pid);
-			//
 			serviceUrl = new JMXServiceURL("service:jmx:rmi:///jndi/rmi://" + host + ":" + jmxport + "/jmxrmi");
 		}
 		logger.info("serviceURL = " + serviceUrl);
@@ -124,7 +144,6 @@ public class JMXMonitor extends IGenericCustomMonitorWrapper {
 			logger.fatal("Could not establish connection..."+ex.toString());
 			throw new Exception("Could not establish connection..."+ex.toString());
 		}
-
 	}
 
 	/**
@@ -145,8 +164,20 @@ public class JMXMonitor extends IGenericCustomMonitorWrapper {
 
 	/**
 	 * Composes result object for required metric
+	 * 
 	 * @param connection
 	 * @param json the object that represent measured metric
+	 *      - "calculate":"_The calculation style of metric_"
+        - 0 - do nothing and put the measured value in result set as it
+        - 1 - calculate absolute difference between current and previous results
+        - 2 - calculate rate of changes between current and previous results per sec
+        - 3 - calculate percentage of difference between current and previous results
+        - 4 - tranform to time format (days-hours.min.sec)
+		- 5 - convert ns to sec
+		- 6 - convert ms to sec
+		- 7	- convert byte to kb
+		- 8 - convert byte to mb
+		- 9 - convert to percent (multiply by 100)
 	 * @return MonResult object (null on FAIL) 
 	 */
 	private MonResult getResult(MBeanServerConnection connection, JSONObject json) {
@@ -157,7 +188,17 @@ public class JMXMonitor extends IGenericCustomMonitorWrapper {
 			String attribute = json.optString("attribute");
 			String key = json.optString("key");
 			String[] format = splitFormat(json.optString("format"), ":");
-			int calculate = json.optInt("calculate", 0);
+			JSONArray jarray = 	new JSONArray();
+			Object calc = json.opt("calculate");
+			if (calc != null){
+				if (calc instanceof JSONArray){
+					jarray = (JSONArray)calc;
+				} else if (calc instanceof Integer){
+					jarray.put((Integer)calc);
+				} else {
+					jarray.put(0);
+				}
+			}
 			String name = format[0];
 			if (jmxObject != null && attribute != null && format != null) {
 				Object obj = query(connection, jmxObject, attribute, key);
@@ -175,20 +216,21 @@ public class JMXMonitor extends IGenericCustomMonitorWrapper {
 				} else {
 					prev_results.add(new MonResult(name, value));
 				}
+				int len = jarray.length();
+				for (int i = 0; i < len; i++){//browse through the calculate array
+					int calculate = jarray.optInt(i, 0);
 				switch (calculate) {
 				case 0:// nothing to do
 					break;
 				case 1:// calculate difference
 					try {
 						value = String.valueOf(Double.valueOf(value) - prev_value);
-					} catch (Exception e) {/* ignore */
-					}
+						} catch (Exception e) {/* ignore */	}
 					break;
 				case 2:// calculate difference per sec
 					try {
-						value = String.format("%3.1f", 1000.0 * (Double.valueOf(value) - prev_value) / duration);
-					} catch (Exception e) {/* ignore */
-					}
+							value = String.format("%3.3f", 1000.0 * (Double.valueOf(value) - prev_value) / duration);
+						} catch (Exception e) {/* ignore */ }
 					break;
 				case 3:// calculate percentage of difference
 					try {
